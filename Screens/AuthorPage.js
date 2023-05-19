@@ -8,7 +8,6 @@ import {
   StatusBar,
   RefreshControl,
   FlatList,
-  Button
 } from 'react-native';
 import 'react-native-gesture-handler';
 
@@ -82,7 +81,6 @@ function AuthorsPage({navigation}){
       )}
     />
     </ScrollView>
-    <Button title='Go to Books' onPress={pressHandler}/>
   </SafeAreaView>
 )};
 
