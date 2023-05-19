@@ -3,7 +3,7 @@ import { StyleSheet, View, TextInput, TouchableOpacity, Text, KeyboardAvoidingVi
 import { gql, useMutation } from '@apollo/client';
 
 const ADD_BOOK_TO_USER = gql`
-  mutation AddBookToUser($authorId: ID!, $bookName: String!, $bookId: String!) {
+  mutation AddBookToUser($authorId: String!, $bookName: String!, $bookId: String!) {
     insert_author_author_book_one(
       object: {
         authorId: $authorId
@@ -51,7 +51,8 @@ export default function AddBook({ navigation, route }) {
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
+    > 
+      <Text style={styles.authorname}>Add book to {author.name}</Text>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -74,6 +75,12 @@ export default function AddBook({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+  authorname:{
+    marginBottom: 10,
+    fontSize: 25,
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
