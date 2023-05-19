@@ -1,8 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, StatusBar, Button } from 'react-native';
 
-export default function AuthorDetails({ route }) {
+export default function AuthorDetails({ navigation, route }) {
   const { author } = route.params;
+  const navigateToAddBook = () => {
+    navigation.navigate('AddBook', { author: author });
+  };
 
   return (
     <SafeAreaView style={styles.safeare}>
@@ -58,6 +61,7 @@ export default function AuthorDetails({ route }) {
             </View>
         </View>
       </ScrollView>
+      <Button title="Add a Book" onPress={navigateToAddBook} />
     </SafeAreaView>
   );
 }
