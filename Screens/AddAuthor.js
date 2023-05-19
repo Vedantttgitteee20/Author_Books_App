@@ -2,38 +2,41 @@ import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { gql, useMutation } from '@apollo/client';
 import LoadingScreen from '../Components/Loading';
-const ADD_BOOK_TO_USER = gql`
-  mutation AddBookToUser($authorId: String!, $bookName: String!, $bookId: String!) {
-    insert_book_book(objects: [{ name: $bookName, id: $bookId, authorId: $authorId }]) {
-      returning {
-        authorId
-        id
-        name
-      }
-    }
+const ADD_AUTHOR = gql`
+mutation AddAuthor($authorId:String!,$authorName:String!,$authorAge:Int!){
+  insert_author_author_one(
+    object: { 
+        id: $authorId, 
+        name: $authorName
+        Age: $authorAge,
+        }) {
+    id
+    name
   }
+}
+
 `;
 
-export default function AddBook({ navigation, route }) {
-  const { author } = route.params;
-  const [bookName, setBookName] = useState('');
-  const [bookId, setBookId] = useState('');
+export default function AddAuthor({ navigation}) {
+  const [authorName, setAuthorName] = useState('');
+  const [authorId, setAuthorId] = useState('');
+  const [authorAge, setAuthorAge] = useState(20);
 
-  const [addBookToUser, { loading, error, data }] = useMutation(ADD_BOOK_TO_USER);
+  const [addoneAuthor, { loading, error, data }] = useMutation(ADD_AUTHOR);
 
-  const handleAddBook = () => {
-    addBookToUser({
+  const handleAddAuthor = () => {
+    addoneAuthor({
       variables: {
-        authorId: author.id,
-        bookName,
-        bookId,
+        authorName,
+        authorAge,
+        authorId
       },
     })
       .then(() => {
         navigation.goBack();
       })
       .catch((error) => {
-        console.error('Error adding book:', error);
+        console.error('Error adding Author:', error);
       });
   };
 
@@ -42,8 +45,8 @@ export default function AddBook({ navigation, route }) {
   }
 
   if (error) {
-    console.error('Error adding book:', error);
-    return <Text>Error adding book</Text>;
+    console.error('Error adding Author:', error);
+    return <Text>Error adding Author</Text>;
   }
 
   return (
@@ -51,22 +54,28 @@ export default function AddBook({ navigation, route }) {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     > 
-      <Text style={styles.authorname}>Add book to {author.name}</Text>
+      <Text style={styles.authorTitle}>Add Author</Text>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Book Name"
-          value={bookName}
-          onChangeText={setBookName}
+          placeholder="Author ID"
+          value={authorId}
+          onChangeText={setAuthorId}
         />
         <TextInput
           style={styles.input}
-          placeholder="Book ID"
-          value={bookId}
-          onChangeText={setBookId}
+          placeholder="Author Name"
+          value={authorName}
+          onChangeText={setAuthorName}
         />
-        <TouchableOpacity style={styles.addButton} onPress={handleAddBook}>
-          <Text style={styles.buttonText}>Add Book</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Author Age"
+          value={authorAge}
+          onChangeText={setAuthorAge}
+        />
+        <TouchableOpacity style={styles.addButton} onPress={handleAddAuthor}>
+          <Text style={styles.buttonText}>Add Author</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -74,7 +83,7 @@ export default function AddBook({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  authorname:{
+    authorTitle:{
     marginBottom: 10,
     fontSize: 25,
     textAlign: 'center',

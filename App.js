@@ -11,6 +11,7 @@ import AuthorsPage from './Screens/AuthorsPage';
 import BookDetails from './Screens/BookDetails';
 import AuthorDetails from './Screens/AuthorDetails';
 import AddBook from './Screens/AddBook';
+import AddAuthor from './Screens/AddAuthor';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const client = new ApolloClient({
@@ -38,6 +39,7 @@ const AuthorsStack = () => (
     <Stack.Screen name="Author" component={AuthorsPage} />
     <Stack.Screen name="AuthorDetails" component={AuthorDetails} />
     <Stack.Screen name="AddBook" component={AddBook} />
+    <Stack.Screen name="AddAuthor" component={AddAuthor} />
   </Stack.Navigator>
 );
 const App = () => (

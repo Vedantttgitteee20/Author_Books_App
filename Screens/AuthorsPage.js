@@ -9,9 +9,11 @@ import {
   FlatList,
   TouchableOpacity,
   RefreshControl,
+  Button
 } from 'react-native';
 import 'react-native-gesture-handler';
 import {gql, useQuery } from '@apollo/client';
+import LoadingScreen from '../Components/Loading.js';
 
 export default function AuthorsPage({navigation}){
   const [refreshing, setRefreshing] = useState(false);
@@ -55,13 +57,16 @@ export default function AuthorsPage({navigation}){
     setTimeout(() => {
       fetchData();
       setRefreshing(false);
-    }, 2000);
+    }, 500);
   };
     const navigateToAuthorDetails = (author) => {
       navigation.navigate('AuthorDetails', { author });
     };
+    const navigatetoAddAuthor =() => {
+      navigation.navigate('AddAuthor');
+    }
     if (loading) {
-      return <Text>Loading...</Text>;
+      return <LoadingScreen />;
     }
     if (error) {
       console.error('Error fetching data:', error);
@@ -98,6 +103,7 @@ export default function AuthorsPage({navigation}){
           )}
         />
         </ScrollView>
+        <Button title="Add Author" onPress={navigatetoAddAuthor} />
         </SafeAreaView>
     )
     }

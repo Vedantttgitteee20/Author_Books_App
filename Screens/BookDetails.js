@@ -1,8 +1,27 @@
 import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, StatusBar } from 'react-native';
+import { gql, useMutation } from '@apollo/client';
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, StatusBar, Button } from 'react-native';
 
-export default function BookDetails({ route }) {
+const DELETE_BOOK = gql`
+  mutation deleteBook($bookId: String!) {
+    delete_book_book_by_pk(id: $bookId) {
+      id
+    }
+  }
+`;
+
+export default function BookDetails({ route, navigation }) {
   const { book } = route.params;
+
+  const [deleteBook] = useMutation(DELETE_BOOK, {
+    onCompleted: () => {
+      navigation.goBack(); // Navigate back to the previous screen after deleting the book
+    },
+  });
+
+  const handleDelete = () => {
+    deleteBook({ variables: { bookId: book.id } });
+  };
 
   return (
     <SafeAreaView style={styles.safeare}>
@@ -11,62 +30,48 @@ export default function BookDetails({ route }) {
       </View>
       <ScrollView>
         <View style={styles.item}>
-        <View style={{marginBottom: 20}}>
-                <View style={{flexDirection: 'row'}}>
-                    <View style={styles.smalltitlecss}>
-                        <Text style={styles.smalltitle}>
-                         Book id
-                        </Text>
-                    </View>
-                    <View style={styles.smallvaluecss}>
-                        <Text style={styles.smallvalue}>
-                        {book.id}
-                        </Text>
-                    </View>
-                </View>
+          {/* Render book details */}
+          <View style={{ marginBottom: 20 }}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={styles.smalltitlecss}>
+                <Text style={styles.smalltitle}>Book id</Text>
+              </View>
+              <View style={styles.smallvaluecss}>
+                <Text style={styles.smallvalue}>{book.id}</Text>
+              </View>
             </View>
-            <View style={{marginBottom: 20}}>
-                <View style={{flexDirection: 'row'}}>
-                <View style={styles.smalltitlecss}>
-                        <Text style={styles.smalltitle}>
-                         Book Name
-                        </Text>
-                    </View>
-                    <View style={styles.smallvaluecss}>
-                        <Text style={styles.smallvalue}>
-                        {book.name}
-                        </Text>
-                    </View>
-                </View>
+          </View>
+          <View style={{ marginBottom: 20 }}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={styles.smalltitlecss}>
+                <Text style={styles.smalltitle}>Book Name</Text>
+              </View>
+              <View style={styles.smallvaluecss}>
+                <Text style={styles.smallvalue}>{book.name}</Text>
+              </View>
             </View>
-            <View style={{marginBottom: 20}}>
-                <View style={{flexDirection: 'row'}}>
-                    <View style={styles.smalltitlecss}>
-                        <Text style={styles.smalltitle}>
-                         Author Name
-                        </Text>
-                    </View>
-                    <View style={styles.smallvaluecss}>
-                        <Text style={styles.smallvalue}>
-                        {book.author.name}
-                        </Text>
-                    </View>
-                </View>
+          </View>
+          <View style={{ marginBottom: 20 }}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={styles.smalltitlecss}>
+                <Text style={styles.smalltitle}>Author Name</Text>
+              </View>
+              <View style={styles.smallvaluecss}>
+                <Text style={styles.smallvalue}>{book.author.name}</Text>
+              </View>
             </View>
-            <View style={{marginBottom: 20}}>
-                <View style={{flexDirection: 'row'}}>
-                    <View style={styles.smalltitlecss}>
-                        <Text style={styles.smalltitle}>
-                         Author age
-                        </Text>
-                    </View>
-                    <View style={styles.smallvaluecss}>
-                        <Text style={styles.smallvalue}>
-                        {book.author.Age}
-                        </Text>
-                    </View>
-                </View>
+          </View>
+          <View style={{ marginBottom: 20 }}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={styles.smalltitlecss}>
+                <Text style={styles.smalltitle}>Author age</Text>
+              </View>
+              <View style={styles.smallvaluecss}>
+                <Text style={styles.smallvalue}>{book.author.Age}</Text>
+              </View>
             </View>
+          </View>
+          <Button title="Delete Book" onPress={handleDelete} color="red" />
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import 'react-native-gesture-handler';
 import {gql, useQuery } from '@apollo/client';
+import LoadingScreen from '../Components/Loading';
 
 export default function BooksPage({navigation}){
   const [refreshing, setRefreshing] = useState(false);
@@ -82,13 +83,13 @@ export default function BooksPage({navigation}){
     setTimeout(() => {
       fetchData();
       setRefreshing(false);
-    }, 2000);
+    }, 500);
   };
   const navigateToBookDetails = (book) => {
     navigation.navigate('BookDetails', { book });
   };
   if (loading) {
-    return <Text>Loading...</Text>;
+    return <LoadingScreen/>;
   }
 
   if (error) {

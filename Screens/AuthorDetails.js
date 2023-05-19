@@ -1,8 +1,54 @@
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, StatusBar, Button } from 'react-native';
+import { gql, useMutation} from '@apollo/client';
+import LoadingScreen from '../Components/Loading';
+const DEL_AUTH = gql`
+  mutation DelAuthor($authorId: String!) {
+    delete_author_author_by_pk(id: $authorId) {
+      id
+    }
+  }
+`;
+
+const DELETE_BOOK = gql`
+  mutation deleteBook($bookId: String!) {
+    delete_book_book_by_pk(id: $bookId) {
+      id
+    }
+  }
+`;
 
 export default function AuthorDetails({ navigation, route }) {
   const { author } = route.params;
+  const [delAuthor, { loading: authorLoading, error: authorError }] = useMutation(DEL_AUTH);
+  const [delBook, { loading: bookLoading, error: bookError }] = useMutation(DELETE_BOOK);
+
+  const deleteAuthor =async  () => {
+    try {
+      // Delete the associated books
+      for (const book of author.books) {
+        await delBook({ variables: { bookId: author.books.id } });
+      }
+
+      // Delete the author
+      await delAuthor({ variables: { authorId: author.id } });
+
+      // Navigate back after successful deletion
+      navigation.goBack();
+    } catch (error) {
+      console.error('Error Deleting Author:', error);
+    }
+  };
+
+  if (authorLoading || bookLoading) {
+    return <LoadingScreen />;
+  }
+
+  if (authorError || bookError) {
+    console.error('Error Deleting Author:', authorError || bookError);
+    return <Text>Delete all associate books first</Text>;
+  }
+
   const navigateToAddBook = () => {
     navigation.navigate('AddBook', { author: author });
   };
@@ -14,52 +60,52 @@ export default function AuthorDetails({ navigation, route }) {
       </View>
       <ScrollView>
         <View style={styles.item}>
-            <View style={{marginBottom: 20}}>
-                <View style={{flexDirection: 'row'}}>
-                    <View style={styles.smalltitlecss}>
-                        <Text style={styles.smalltitle}>
-                         Author Name
-                        </Text>
-                    </View>
-                    <View style={styles.smallvaluecss}>
-                        <Text style={styles.smallvalue}>
-                        {author.name}
-                        </Text>
-                    </View>
-                </View>
+          <View style={{ marginBottom: 20 }}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={styles.smalltitlecss}>
+                <Text style={styles.smalltitle}>Author ID</Text>
+              </View>
+              <View style={styles.smallvaluecss}>
+                <Text style={styles.smallvalue}>{author.id}</Text>
+              </View>
             </View>
-            <View style={{marginBottom: 20}}>
-                <View style={{flexDirection: 'row'}}>
-                    <View style={styles.smalltitlecss}>
-                        <Text style={styles.smalltitle}>
-                         Author age
-                        </Text>
-                    </View>
-                    <View style={styles.smallvaluecss}>
-                        <Text style={styles.smallvalue}>
-                        {author.Age}
-                        </Text>
-                    </View>
-                </View>
+          </View>
+          <View style={{ marginBottom: 20 }}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={styles.smalltitlecss}>
+                <Text style={styles.smalltitle}>Author Name</Text>
+              </View>
+              <View style={styles.smallvaluecss}>
+                <Text style={styles.smallvalue}>{author.name}</Text>
+              </View>
             </View>
-            <View style={{marginBottom: 20}}>
-                <View style={{flexDirection: 'row'}}>
-                <View style={styles.smalltitlecss}>
-                        <Text style={styles.smalltitle}>
-                         Book Name
-                        </Text>
-                    </View>
-                    <View style={styles.smallvaluecss}>
-                        <Text style={styles.smallvalue}>
-                        {/* {author.books.name} */}
-                        {author.books.map((author) => (
-                  <Text key={author.name}>{author.name}, </Text>
-                ))}
-                        </Text>
-                    </View>
-                </View>
+          </View>
+          <View style={{ marginBottom: 20 }}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={styles.smalltitlecss}>
+                <Text style={styles.smalltitle}>Author age</Text>
+              </View>
+              <View style={styles.smallvaluecss}>
+                <Text style={styles.smallvalue}>{author.Age}</Text>
+              </View>
             </View>
+          </View>
+          <View style={{ marginBottom: 20 }}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={styles.smalltitlecss}>
+                <Text style={styles.smalltitle}>Book Name</Text>
+              </View>
+              <View style={styles.smallvaluecss}>
+                <Text style={styles.smallvalue}>
+                  {author.books.map((author) => (
+                    <Text key={author.name}>{author.name}, </Text>
+                  ))}
+                </Text>
+              </View>
+            </View>
+          </View>
         </View>
+        <Button title="Delete Author" onPress={deleteAuthor} />
       </ScrollView>
       <Button title="Add a Book" onPress={navigateToAddBook} />
     </SafeAreaView>
@@ -67,18 +113,18 @@ export default function AuthorDetails({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  smalltitlecss:{
+  smalltitlecss: {
     width: '30%'
   },
-  smallvaluecss:{
+  smallvaluecss: {
     width: '75%'
   },
-  smalltitle:{
+  smalltitle: {
     fontSize: 12,
     fontWeight: 'bold',
     color: 'black',
   },
-  smallvalue:{
+  smallvalue: {
     fontSize: 12,
     color: 'black',
   },
