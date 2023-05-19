@@ -12,78 +12,72 @@ import {
   // Button
 } from 'react-native';
 import 'react-native-gesture-handler';
+import {gql, useQuery } from '@apollo/client';
 
 export default function BooksPage({navigation}){
   const [refreshing, setRefreshing] = useState(false);
+  const GET_BOOKS = gql`
+  query {
+      book_book {
+       id
+       name
+       authorId
+       author {
+         id
+         name
+         Age
+       }
+      }
+    }
+  `;
+  const { loading, error, data } = useQuery(GET_BOOKS);
   const [books, setBooks] = useState([
       {
          name: 'Harry Potter and the Goblet of Fire',
          id: 1,
-         authorId : '6f6929a8-e36e-425c-8a2e-728087dac8ee'
+         authorId : '6f6929a8-e36e-425c-8a2e-728087dac8ee',
+         author: {
+          id: '6f6929a8-e36e-425c-8a2e-728087dac8ee',
+          name: 'J.K. Rowling',
+          Age: 55,
+        },
        },
        {
         name: 'Harry Potter and Half Blood Prince',
         id: 2,
-        authorId :'6f6929a8-e36e-425c-8a2e-728087dac8ee'
+        authorId :'6f6929a8-e36e-425c-8a2e-728087dac8ee',
+        author: {
+          id: '6f6929a8-e36e-425c-8a2e-728087dac8ee',
+          name: 'J.K. Rowling',
+          Age: 55,
+        },
       },
   ]);
-  // const [Books, SetBooks]=useState ([
-  //   {
-  //     title: 'Harry Potter and the Goblet of Fire',
-  //     charac: ['Harry Potter', 'Cedric Diggory', 'Victor Krum', 'Barty Crouch'],
-  //   },
-  //   {
-  //     title: 'Harry Potter and the Order of the Phoenix',
-  //     charac: ['Professor Snape', 'Harry Potter', 'Lord Voldemort'],
-  //   },
-  //   {
-  //     title: 'Harry Potter and the Prisoner of Azkaban',
-  //     charac: ['Serius Black', 'Professor Snape'],
-  //   },
-  //   {
-  //     title: 'Harry Potter and the Chamber of Secrets',
-  //     charac: ['Hagrid', 'Ron Weasly'],
-  //   },
-  //   {
-  //     title: 'The Kite Runner',
-  //     charac: ['Hassaan', 'Ali'],
-  //   },
-  // ]);
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (data) {
+      setBooks(data.book_book);
+    }
+  }, [data]);
+
 
   const fetchData = async () => {
-    try {
-      const response = await fetch('https://evolving-warthog-44.hasura.app/v1/graphql', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // Add any necessary headers, such as authorization token
-        },
-        body: JSON.stringify({
-          query: `
-            query{
-              book_book{
-                id
-                name
-                authorId
-              }
-            }
-          `,
-        }),
+    client
+      .query({
+        query: GET_BOOKS,
+      })
+      .then((result) => {
+        setBooks(result.data.book_book);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      })
+      .finally(() => {
+        setRefreshing(false);
       });
-
-      const { data } = await response.json();
-      setBooks(data.book_book);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
   };
 
   const onRefresh = () => {
     setRefreshing(true);
-    fetchData();
     // Simulate data fetching delay
     setTimeout(() => {
       fetchData();
@@ -93,6 +87,14 @@ export default function BooksPage({navigation}){
   const navigateToBookDetails = (book) => {
     navigation.navigate('BookDetails', { book });
   };
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (error) {
+    console.error('Error fetching data:', error);
+    return <Text>Error fetching data</Text>;
+  }
   return(
   <SafeAreaView style={styles.safeare}>
   <View style={{
@@ -115,8 +117,7 @@ export default function BooksPage({navigation}){
         onPress={() => navigateToBookDetails(item)}
         style={styles.item}>
           <Text style={styles.booktitle}>{item.name}</Text>
-          <Text style={styles.character}>ID: {item.id}</Text>
-          <Text style={styles.character}>Author ID: {item.authorId}</Text>
+          <Text style={styles.character}>Author Name: {item.author.name}</Text>
         </TouchableOpacity>
       )}
     />
