@@ -14,6 +14,7 @@ import {
 import 'react-native-gesture-handler';
 import {gql, useQuery } from '@apollo/client';
 import LoadingScreen from '../Components/Loading.js';
+import ErrorModal from '../Components/ModalForError.js';
 
 export default function AuthorsPage({navigation}){
   const [refreshing, setRefreshing] = useState(false);
@@ -65,12 +66,14 @@ export default function AuthorsPage({navigation}){
     const navigatetoAddAuthor =() => {
       navigation.navigate('AddAuthor');
     }
+    const handleClose = () =>{
+      console.error('Error fetching data:', error);
+    } 
     if (loading) {
       return <LoadingScreen />;
     }
     if (error) {
-      console.error('Error fetching data:', error);
-      return <Text>Error fetching data</Text>;
+      return <ErrorModal errorMessage="Error fetching data" onClose={handleClose} ></ErrorModal>;
     }
     return(
       <SafeAreaView style={styles.safeare}>

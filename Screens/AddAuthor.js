@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { gql, useMutation } from '@apollo/client';
 import LoadingScreen from '../Components/Loading';
+import ErrorModal from '../Components/ModalForError';
 const ADD_AUTHOR = gql`
 mutation AddAuthor($authorId:String!,$authorName:String!,$authorAge:Int!){
   insert_author_author_one(
@@ -23,7 +24,9 @@ export default function AddAuthor({ navigation}) {
   const [authorAge, setAuthorAge] = useState(20);
 
   const [addoneAuthor, { loading, error, data }] = useMutation(ADD_AUTHOR);
-
+  const handleClose = () =>{
+    navigation.goBack();
+  } 
   const handleAddAuthor = () => {
     addoneAuthor({
       variables: {
@@ -46,7 +49,8 @@ export default function AddAuthor({ navigation}) {
 
   if (error) {
     console.error('Error adding Author:', error);
-    return <Text>Error adding Author</Text>;
+    const displaymessage = "Error adding Author: \n"+ error;
+    return <ErrorModal errorMessage={displaymessage} onClose={handleClose} ></ErrorModal>;
   }
 
   return (

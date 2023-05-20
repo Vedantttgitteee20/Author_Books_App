@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, StatusBar, Button } from 'react-native';
 import { gql, useMutation} from '@apollo/client';
 import LoadingScreen from '../Components/Loading';
+import ErrorModal from '../Components/ModalForError';
 const DEL_AUTH = gql`
   mutation DelAuthor($authorId: String!) {
     delete_author_author_by_pk(id: $authorId) {
@@ -39,14 +40,16 @@ export default function AuthorDetails({ navigation, route }) {
       console.error('Error Deleting Author:', error);
     }
   };
-
+  const handleClose = () =>{
+    navigation.goBack();
+  } 
   if (authorLoading || bookLoading) {
     return <LoadingScreen />;
   }
 
   if (authorError || bookError) {
     console.error('Error Deleting Author:', authorError || bookError);
-    return <Text>Delete all associate books first</Text>;
+    return <ErrorModal errorMessage="Delete all associate books first" onClose={handleClose} ></ErrorModal>;
   }
 
   const navigateToAddBook = () => {
