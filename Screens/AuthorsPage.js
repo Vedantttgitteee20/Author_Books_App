@@ -15,6 +15,7 @@ import 'react-native-gesture-handler';
 import {gql, useQuery } from '@apollo/client';
 import LoadingScreen from '../Components/Loading.js';
 import ErrorModal from '../Components/ModalForError.js';
+import { colors } from '../constant/commonStyle.js';
 
 export default function AuthorsPage({navigation}){
   const [refreshing, setRefreshing] = useState(false);
@@ -30,27 +31,38 @@ export default function AuthorsPage({navigation}){
       }
       }
   `;
-  const { loading, error, data } = useQuery(GET_AUTHS);
+  const { loading, error, data, refetch } = useQuery(GET_AUTHS);
   const [authors, setAuthors] = useState([]);
   useEffect(() => {
+    refetch();
     if (data) {
       setAuthors(data.author_author);
     }
   }, [data]);
+  // const fetchData = async () => {
+  //   client
+  //     .query({
+  //       query: GET_AUTHS,
+  //     })
+  //     .then((result) => {
+  //       setAuthors(result.data.author_author);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching data:', error);
+  //     })
+  //     .finally(() => {
+  //       setRefreshing(false);
+  //     });
+  // };
   const fetchData = async () => {
-    client
-      .query({
-        query: GET_AUTHS,
-      })
-      .then((result) => {
-        setAuthors(result.data.author_author);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      })
-      .finally(() => {
-        setRefreshing(false);
-      });
+    try {
+      const result = await refetch();
+      setAuthors(result.data.author_author);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setRefreshing(false);
+    }
   };
   const onRefresh = () => {
     setRefreshing(true);
@@ -120,7 +132,7 @@ export default function AuthorsPage({navigation}){
       safeare: {
         height: '100%',
         padding: 10,
-        backgroundColor: '#d2c3cc' 
+        backgroundColor: colors.screen 
       },
       container: {
         flex: 1,
@@ -128,7 +140,7 @@ export default function AuthorsPage({navigation}){
         marginHorizontal: 16,
       },
       item: {
-        backgroundColor: '#f9c2ff',
+        backgroundColor: colors.secondary,
         padding: 20,
         marginVertical: 8,
       },

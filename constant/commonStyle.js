@@ -1,0 +1,32 @@
+export const colors = {
+  primary: '#0071DF',
+  secondary: '#FFF6B7',
+  ternary: '#F6416C',
+  screen: '#d2c3cc',
+  screen2: '#E5E5E5',
+  success: '#2FAE60',
+  alert: '#EB5757',
+  textPrimary: '#000000',
+  textLight: '#717171',
+  textFaint: '#DADADA',
+  textXLight: '#F2F2F2',
+  primaryLight: '#D6EBFF',
+  borderColor: '#DEDEDE',
+  borderColor1: '#27AE60',
+  white: '#FFFFFF',
+  background: '#F8F8F8',
+};
+
+export const fontSize = {
+  title: 25,
+  text: 21,
+  text1: 20,
+  h1: 17,
+  h2: 16,
+  h3: 15,
+  h4: 14,
+  h5: 13,
+  h6: 12,
+  h7: 11,
+  h8: 18,
+};

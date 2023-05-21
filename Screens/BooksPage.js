@@ -14,6 +14,7 @@ import {
 import 'react-native-gesture-handler';
 import {gql, useQuery } from '@apollo/client';
 import LoadingScreen from '../Components/Loading';
+import { colors } from '../constant/commonStyle';
 
 export default function BooksPage({navigation}){
   const [refreshing, setRefreshing] = useState(false);
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
   safeare: {
     height: '100%',
     padding: 10,
-    backgroundColor: '#d2c3cc' 
+    backgroundColor: colors.screen, 
   },
   container: {
     flex: 1,
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   item: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: colors.secondary,
     padding: 20,
     marginVertical: 8,
   },

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { gql, useMutation } from '@apollo/client';
 import LoadingScreen from '../Components/Loading';
+import ErrorModal from '../Components/ModalForError';
 const ADD_BOOK_TO_USER = gql`
   mutation AddBookToUser($authorId: String!, $bookName: String!, $bookId: String!) {
     insert_book_book(objects: [{ name: $bookName, id: $bookId, authorId: $authorId }]) {
@@ -36,14 +37,17 @@ export default function AddBook({ navigation, route }) {
         console.error('Error adding book:', error);
       });
   };
-
+  const handleClose = () =>{
+    navigation.goBack();
+  } 
   if (loading) {
     return <LoadingScreen />;
   }
 
   if (error) {
     console.error('Error adding book:', error);
-    return <Text>Error adding book</Text>;
+    const displaymessage = "Error adding Book: \n"+ error;
+    return <ErrorModal errorMessage={displaymessage} onClose={handleClose} ></ErrorModal>;
   }
 
   return (
