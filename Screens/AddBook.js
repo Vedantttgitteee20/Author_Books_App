@@ -3,6 +3,7 @@ import { StyleSheet, View, TextInput, TouchableOpacity, Text, KeyboardAvoidingVi
 import { gql, useMutation } from '@apollo/client';
 import LoadingScreen from '../Components/Loading';
 import ErrorModal from '../Components/ModalForError';
+import { colors } from '../constant/commonStyle';
 const ADD_BOOK_TO_USER = gql`
   mutation AddBookToUser($authorId: String!, $bookName: String!, $bookId: String!) {
     insert_book_book(objects: [{ name: $bookName, id: $bookId, authorId: $authorId }]) {
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
-    backgroundColor: '#d2c3cc',
+    backgroundColor: colors.background,
   },
   inputContainer: {
     alignItems: 'center',
@@ -96,19 +97,19 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
     height: 40,
-    backgroundColor: 'white',
+    backgroundColor: colors.textinput,
     borderRadius: 8,
     paddingHorizontal: 10,
     marginBottom: 20,
   },
   addButton: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: colors.ternary,
     padding: 10,
     borderRadius: 8,
   },
   buttonText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: 'black',
+    color: 'white',
   },
 });

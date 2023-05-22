@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, SafeAreaView, ScrollView, StatusBar, Button } f
 import { gql, useMutation} from '@apollo/client';
 import LoadingScreen from '../Components/Loading';
 import ErrorModal from '../Components/ModalForError';
+import { colors } from '../constant/commonStyle.js';
 const DEL_AUTH = gql`
   mutation DelAuthor($authorId: String!) {
     delete_author_author_by_pk(id: $authorId) {
@@ -108,9 +109,9 @@ export default function AuthorDetails({ navigation, route }) {
             </View>
           </View>
         </View>
-        <Button title="Delete Author" onPress={deleteAuthor} />
+        <Button title="Delete Author" onPress={deleteAuthor} color={colors.ternary}/>
       </ScrollView>
-      <Button title="Add a Book" onPress={navigateToAddBook} />
+      <Button title="Add a Book" onPress={navigateToAddBook} color={colors.ternary}/>
     </SafeAreaView>
   );
 }
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
   safeare: {
     height: '100%',
     padding: 10,
-    backgroundColor: '#d2c3cc',
+    backgroundColor: colors.background,
   },
   container: {
     flex: 1,
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   item: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: colors.secondary,
     padding: 20,
     marginVertical: 8,
   },

@@ -118,7 +118,7 @@ export default function AuthorsPage({navigation}){
           )}
         />
         </ScrollView>
-        <Button title="Add Author" onPress={navigatetoAddAuthor} />
+        <Button title="Add Author" onPress={navigatetoAddAuthor} color={colors.ternary} />
         </SafeAreaView>
     )
     }
@@ -132,7 +132,7 @@ export default function AuthorsPage({navigation}){
       safeare: {
         height: '100%',
         padding: 10,
-        backgroundColor: colors.screen 
+        backgroundColor: colors.background 
       },
       container: {
         flex: 1,

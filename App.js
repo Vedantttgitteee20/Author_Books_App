@@ -7,10 +7,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
 // import TempPage from './Screens/Temp';
 import BooksPage from './Screens/BooksPage';
-import AuthorsPage from './Screens/AuthorsPage';
 import BookDetails from './Screens/BookDetails';
-import AuthorDetails from './Screens/AuthorDetails';
 import AddBook from './Screens/AddBook';
+import EditBook from './Screens/EditBook';
+import AuthorsPage from './Screens/AuthorsPage';
+import AuthorDetails from './Screens/AuthorDetails';
 import AddAuthor from './Screens/AddAuthor';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -32,6 +33,7 @@ const BooksStack = () => (
   <Stack.Navigator >
     <Stack.Screen name="Books" component={BooksPage} />
     <Stack.Screen name="BookDetails" component={BookDetails} />
+    <Stack.Screen name="EditBook" component={EditBook} />
   </Stack.Navigator>
 );
 const AuthorsStack = () => (

@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   safeare: {
     height: '100%',
     padding: 10,
-    backgroundColor: colors.screen, 
+    backgroundColor: colors.background, 
   },
   container: {
     flex: 1,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, StatusBar, Button } from 'react-native';
-
+import { colors } from '../constant/commonStyle.js';
 const DELETE_BOOK = gql`
   mutation deleteBook($bookId: String!) {
     delete_book_book_by_pk(id: $bookId) {
@@ -23,12 +23,15 @@ export default function BookDetails({ route, navigation }) {
     deleteBook({ variables: { bookId: book.id } });
   };
 
+  const handleEditBook = () => {
+    navigation.navigate('EditBook', { book });
+  };
   return (
     <SafeAreaView style={styles.safeare}>
       <View style={{ height: 50, justifyContent: 'center' }}>
         <Text style={styles.maintitle}>Book Details</Text>
       </View>
-      <ScrollView>
+      <ScrollView >
         <View style={styles.item}>
           {/* Render book details */}
           <View style={{ marginBottom: 20 }}>
@@ -71,9 +74,10 @@ export default function BookDetails({ route, navigation }) {
               </View>
             </View>
           </View>
-          <Button title="Delete Book" onPress={handleDelete} color="red" />
+          <Button title="Delete Book" onPress={handleDelete} color={colors.ternary} />
         </View>
       </ScrollView>
+      <Button title="Edit Book" onPress={handleEditBook} color={colors.ternary} />
     </SafeAreaView>
   );
 }
@@ -102,7 +106,7 @@ const styles = StyleSheet.create({
   safeare: {
     height: '100%',
     padding: 10,
-    backgroundColor: '#d2c3cc',
+    backgroundColor: colors.background,
   },
   container: {
     flex: 1,
@@ -110,7 +114,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   item: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: colors.secondary,
     padding: 20,
     marginVertical: 8,
   },
