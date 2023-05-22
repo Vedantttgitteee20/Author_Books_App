@@ -24,7 +24,9 @@ export default function AuthorDetails({ navigation, route }) {
   const { author } = route.params;
   const [delAuthor, { loading: authorLoading, error: authorError }] = useMutation(DEL_AUTH);
   const [delBook, { loading: bookLoading, error: bookError }] = useMutation(DELETE_BOOK);
-
+  const handleEditAuthor = () => {
+    navigation.navigate('EditAuthor', { author });
+  };
   const deleteAuthor =async  () => {
     try {
       // Delete the associated books
@@ -109,7 +111,10 @@ export default function AuthorDetails({ navigation, route }) {
             </View>
           </View>
         </View>
-        <Button title="Delete Author" onPress={deleteAuthor} color={colors.ternary}/>
+        <View style={styles.buttons_css}>
+        <Button title="Edit Author" onPress={handleEditAuthor} color={colors.ternary} style= {styles.leftButton}/>
+        <Button title="Delete Author" onPress={deleteAuthor} color={colors.ternary} style= {styles.rightButton}/>
+        </View>
       </ScrollView>
       <Button title="Add a Book" onPress={navigateToAddBook} color={colors.ternary}/>
     </SafeAreaView>
@@ -117,6 +122,18 @@ export default function AuthorDetails({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+  buttons_css: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  leftButton: {
+    flex: 1,
+  },
+
+  rightButton: {
+    flex: 1,
+  },
   smalltitlecss: {
     width: '30%'
   },
