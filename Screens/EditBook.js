@@ -19,6 +19,7 @@ mutation updateBook($bookId: String!, $name: String!, $authorName: String!, $aut
 
 export default function EditBook({ route, navigation }) {
   const { book } = route.params;
+  const { refetch } = route.params;
   const [bookName, setBookName] = useState(book.name);
   const [authorName, setAuthorName] = useState(book.author.name);
   const [authorAge, setAuthorAge] = useState(book.author.Age);
@@ -40,6 +41,7 @@ export default function EditBook({ route, navigation }) {
         authorAge: authorAge,
       },
     });
+    refetch();
   };
 
   return (

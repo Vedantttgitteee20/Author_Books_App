@@ -90,8 +90,8 @@ export default function BooksPage({navigation}){
     }
   };
   
-  const navigateToBookDetails = (book) => {
-    navigation.navigate('BookDetails', { book });
+  const navigateToBookDetails = (book, refetch) => {
+    navigation.navigate('BookDetails', { book , refetch});
   };
   if (loading) {
     return <LoadingScreen/>;
@@ -116,7 +116,7 @@ export default function BooksPage({navigation}){
       keyExtractor={(item, index) => index.toString()}
       renderItem={({ item }) => (
         <TouchableOpacity
-        onPress={() => navigateToBookDetails(item)}
+        onPress={() => navigateToBookDetails(item, refetch)}
         style={styles.item}>
           <Text style={styles.booktitle}>{item.name}</Text>
           <Text style={styles.character}>Author Name: {item.author.name}</Text>
