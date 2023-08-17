@@ -14,7 +14,7 @@ mutation updateAuthor($authorName: String!, $authorAge: Int!, $authorId: String!
 `;
 
 export default function EditAuthor({ route, navigation }) {
-  const { author } = route.params;
+  const { author, refetch } = route.params;
   const [authorId, setAuthorId] = useState(author.id);
   const [authorName, setAuthorName] = useState(author.name);
   const [authorAge, setAuthorAge] = useState(author.Age);
@@ -22,6 +22,7 @@ export default function EditAuthor({ route, navigation }) {
 
   const [updateAuth] = useMutation(UPDATE_AUTH, {
     onCompleted: () => {
+      refetch();
       navigation.goBack(); // Navigate back to the previous screen after updating the book
     },
   });
@@ -34,6 +35,7 @@ export default function EditAuthor({ route, navigation }) {
         authorAge: authorAge,
       },
     });
+    refetch();
   };
 
   return (

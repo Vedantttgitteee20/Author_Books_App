@@ -12,9 +12,11 @@ const DELETE_BOOK = gql`
 
 export default function BookDetails({ route, navigation }) {
   const { book } = route.params;
+  const { refetch }= route.params;
 
   const [deleteBook] = useMutation(DELETE_BOOK, {
     onCompleted: () => {
+      refetch();
       navigation.goBack(); // Navigate back to the previous screen after deleting the book
     },
   });
@@ -23,8 +25,8 @@ export default function BookDetails({ route, navigation }) {
     deleteBook({ variables: { bookId: book.id } });
   };
 
-  const handleEditBook = () => {
-    navigation.navigate('EditBook', { book });
+  const handleEditBook = (refetch) => {
+    navigation.navigate('EditBook', { book, refetch });
   };
   return (
     <SafeAreaView style={styles.safeare}>
@@ -77,7 +79,7 @@ export default function BookDetails({ route, navigation }) {
           <Button title="Delete Book" onPress={handleDelete} color={colors.ternary} />
         </View>
       </ScrollView>
-      <Button title="Edit Book" onPress={handleEditBook} color={colors.ternary} />
+      <Button title="Edit Book" onPress={handleEditBook(refetch)} color={colors.ternary} />
     </SafeAreaView>
   );
 }

@@ -74,11 +74,11 @@ export default function AuthorsPage({navigation}){
       setRefreshing(false);
     }
   };
-    const navigateToAuthorDetails = (author) => {
-      navigation.navigate('AuthorDetails', { author });
+    const navigateToAuthorDetails = (author, refetch) => {
+      navigation.navigate('AuthorDetails', { author,refetch });
     };
-    const navigatetoAddAuthor =() => {
-      navigation.navigate('AddAuthor');
+    const navigatetoAddAuthor =(refetch) => {
+      navigation.navigate('AddAuthor',{refetch});
     }
     const handleClose = () =>{
       console.error('Error fetching data:', error);
@@ -104,7 +104,7 @@ export default function AuthorsPage({navigation}){
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity
-            onPress={() => navigateToAuthorDetails(item)}
+            onPress={() => navigateToAuthorDetails(item, refetch)}
             style={styles.item}>
               <Text style={styles.booktitle}>{item.name}</Text>
               <Text style={styles.bookNames}>
