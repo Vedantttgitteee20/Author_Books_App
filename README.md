@@ -1,5 +1,5 @@
 # Author_Books_App
-A React Native App in Expo that connect to Hasura Database and implement feature of deleting, inserting, updating Author and Books. Its map one to many relationship from Authors to Books.
+A React Native App in Expo that connect to Hasura Database and implement feature of deleting, inserting, updating Author and Books. 
 
 **Git Link**: https://github.com/Vedantttgitteee20/Author_Books_App
 
