@@ -32,7 +32,7 @@ export default function BooksPage({navigation}){
       }
     }
   `;
-  const { loading, error, data } = useQuery(GET_BOOKS);
+  const { loading, error, data, refetch } = useQuery(GET_BOOKS);
   const [books, setBooks] = useState([
       {
          name: 'Harry Potter and the Goblet of Fire',
@@ -77,15 +77,19 @@ export default function BooksPage({navigation}){
         setRefreshing(false);
       });
   };
+  
 
-  const onRefresh = () => {
+  const onRefresh = async () => {
     setRefreshing(true);
-    // Simulate data fetching delay
-    setTimeout(() => {
-      fetchData();
+    try {
+      await refetch();
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
       setRefreshing(false);
-    }, 500);
+    }
   };
+  
   const navigateToBookDetails = (book) => {
     navigation.navigate('BookDetails', { book });
   };
@@ -107,10 +111,6 @@ export default function BooksPage({navigation}){
       Books
     </Text>
   </View>
-  <ScrollView
-  refreshControl={
-    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-  }>
   <FlatList
       data={books}
       keyExtractor={(item, index) => index.toString()}
@@ -122,8 +122,10 @@ export default function BooksPage({navigation}){
           <Text style={styles.character}>Author Name: {item.author.name}</Text>
         </TouchableOpacity>
       )}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
     />
-    </ScrollView>
     {/* <Button title='Go to Author' onPress={pressHandler}/> */}
     </SafeAreaView>
 )

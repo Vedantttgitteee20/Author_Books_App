@@ -64,13 +64,15 @@ export default function AuthorsPage({navigation}){
       setRefreshing(false);
     }
   };
-  const onRefresh = () => {
+  const onRefresh = async () => {
     setRefreshing(true);
-    // Simulate data fetching delay
-    setTimeout(() => {
-      fetchData();
+    try {
+      await refetch();
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
       setRefreshing(false);
-    }, 500);
+    }
   };
     const navigateToAuthorDetails = (author) => {
       navigation.navigate('AuthorDetails', { author });
@@ -97,10 +99,6 @@ export default function AuthorsPage({navigation}){
           Authors
         </Text>
       </View>
-      <ScrollView
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }>
       <FlatList
           data={authors}
           keyExtractor={(item, index) => index.toString()}
@@ -116,8 +114,10 @@ export default function AuthorsPage({navigation}){
                 ))}</Text>
             </TouchableOpacity>
           )}
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
         />
-        </ScrollView>
         <Button title="Add Author" onPress={navigatetoAddAuthor} color={colors.ternary} />
         </SafeAreaView>
     )
