@@ -19,6 +19,7 @@ mutation AddAuthor($authorId:String!,$authorName:String!,$authorAge:Int!){
 `;
 
 export default function AddAuthor({ navigation}) {
+  const { refetch } = route.params;
   const [authorName, setAuthorName] = useState('');
   const [authorId, setAuthorId] = useState('');
   const [authorAge, setAuthorAge] = useState(20);
@@ -36,6 +37,7 @@ export default function AddAuthor({ navigation}) {
       },
     })
       .then(() => {
+        refetch();
         navigation.goBack();
       })
       .catch((error) => {

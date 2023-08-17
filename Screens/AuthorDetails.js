@@ -22,10 +22,11 @@ const DELETE_BOOK = gql`
 
 export default function AuthorDetails({ navigation, route }) {
   const { author } = route.params;
+  const { refetch } = route.params;
   const [delAuthor, { loading: authorLoading, error: authorError }] = useMutation(DEL_AUTH);
   const [delBook, { loading: bookLoading, error: bookError }] = useMutation(DELETE_BOOK);
   const handleEditAuthor = () => {
-    navigation.navigate('EditAuthor', { author });
+    navigation.navigate('EditAuthor', { author, refetch });
   };
   const deleteAuthor =async  () => {
     try {
@@ -38,12 +39,14 @@ export default function AuthorDetails({ navigation, route }) {
       await delAuthor({ variables: { authorId: author.id } });
 
       // Navigate back after successful deletion
+      refetch();
       navigation.goBack();
     } catch (error) {
       console.error('Error Deleting Author:', error);
     }
   };
   const handleClose = () =>{
+    refetch();
     navigation.goBack();
   } 
   if (authorLoading || bookLoading) {
