@@ -6,6 +6,7 @@ export const colors = {
   alert: '#EB5757',
   borderColor: '#DEDEDE',
   white: '#FFFFFF',
+  black: '#000000',
   background: '#F8F8F8',
 };
 
